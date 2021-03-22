@@ -63,11 +63,13 @@ client.on('message', (channel, tags, message, self) => {
 
         console.log(message);
         if (!wsConnection) return console.error("*Website client not connected");
+
+        var numQuestions = message.split(/ (.+)/)[1];
         
-        console.log("Starting Jeopardy!");
-        wsConnection.send("loadingQs");
+        getQuestions(numQuestions).then((res) => {
+            console.log(`*Starting Jeopardy with ${numQuestions} questions`);
+            wsConnection.send("loadingQs");
         
-        getQuestions().then((res) => {
             // save questions in global variable
             questions = res;
 
@@ -75,6 +77,8 @@ client.on('message', (channel, tags, message, self) => {
             wsConnection.send(JSON.stringify(questions[currentQuestion]));
             console.log("Answer: ", questions[currentQuestion].answer);
             gameRunning = true;
+        }).catch((error) => {
+            console.error(error);
         });
         
         return;
@@ -125,9 +129,9 @@ function getSimilarityScore(answer, guess) {
 }
 
 async function getQuestions(numQs = 5) {
-    if (isNaN(numQs)) return console.error(`Invalid numQs "${numQs}"`);
-    if (numQs < 1) return console.error(`Invalid numQs "${numQs}"`);
-    if (numQs > 50) return console.error(`Invalid numQs "${numQs}"`);
+    if (isNaN(numQs)) throw(`Invalid numQs "${numQs}"`);
+    if (numQs < 1) throw(`Invalid numQs "${numQs}"`);
+    if (numQs > 50) throw(`Invalid numQs "${numQs}"`);
     try {
         const popCats = [306,136,42,780,21,105,25,103,7,442,67,227,109,114,31,176,582,1114,508,49,561,223,
                         770,622,313,253,420,83,184,211,51,539,267,357,530,369,672,793,78,574,777,680,50,99,
@@ -155,7 +159,11 @@ async function getQuestions(numQs = 5) {
             const parsedData = JSON.parse(resoponse.body);
             
             for (let j = 0; j < questionsPerCat; j++) {
-                const temp = parsedData.clues[Math.floor(Math.random() * parsedData.clues.length)];
+                let temp;
+                do {
+                    temp = parsedData.clues[Math.floor(Math.random() * parsedData.clues.length)];
+                } while (temp.invalid_count !== null && temp.question !== "");
+
                 temp.category_name = parsedData.title;
                 if (!temp.value) temp.value = 200;
                 questions.push(temp);

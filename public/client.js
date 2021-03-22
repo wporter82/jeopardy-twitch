@@ -34,7 +34,7 @@ connection.onopen = function (evt) {
             let username = msg.data.split('|')[1];
             clearInterval(timerHandle);
 
-            timerDiv.style.display = 'none';
+            hideTimer();
 
             showAnswer();
             answerDiv.innerHTML += `by User: ${username}`
@@ -47,11 +47,11 @@ connection.onopen = function (evt) {
             console.log("Ending Game");
             
             // Hide game screen
-            title.style.display = 'none';            
+            title.style.display = 'none';
             messagesDiv.style.display = 'none';
             questionBlock.style.display = 'none';
-            timerDiv.style.display = 'none';
-            answerDiv.style.display = 'none';
+            hideTimer();
+            hideAnswer();
 
             // Show game over screen
             gameOverDiv.style.display = 'block';
@@ -100,41 +100,50 @@ function startGame(question) {
 
     // Display question
     questionBlock.innerHTML = `<div class="category">${String(question.category_name).toUpperCase()}</div>`;
-    questionBlock.innerHTML += `<div class="value">${question.value}</div><br>`;
+    questionBlock.innerHTML += `<div class="airdate">Airdate: ${formatAirdate(question.airdate)}</div>`;
+    questionBlock.innerHTML += `<div class="value">Points: ${question.value}</div><br>`;
     questionBlock.innerHTML += `<div class="question">${question.question}</div>`;
     questionBlock.style.display = 'block';
 
     // Display timer and start counting down
-    timerDiv.style.display = 'block';
-    startTimer(TIME_LIMIT,timerDiv);
+    startTimer(TIME_LIMIT);
 }
 
 function showAnswer() {
-    timerDiv.style.display = 'none';
-
-    answerDiv.innerHTML = `Correct Answer:<br><br>${question.answer}<br><br>`;
+    answerDiv.style.transform = 'scale(0)';
     answerDiv.style.display = 'block';
+    answerDiv.innerHTML = `Correct Answer:<br><br>${question.answer}<br><br>`;
+
+    let scale = 0;
+    let interval = 0.05;
+
+    let animAnswer = setInterval(function () {
+        scale += interval;
+
+        answerDiv.style.transform = `scale(${scale})`;
+
+        if (scale >= 1) {
+            clearInterval(animAnswer);
+        }
+    }, 4);
 }
 
-function startTimer(startTime, divId) {
-    let timer = startTime, minutes, seconds;
+function hideAnswer() {
+    answerDiv.style.transform = 'scale(1)';
     
-    timerHandle = setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
+    let scale = 1;
+    let interval = 0.05;
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+    let animAnswer = setInterval(function () {
+        scale -= interval;
 
-        divId.textContent = minutes + ":" + seconds;
+        answerDiv.style.transform = `scale(${scale})`;
 
-        if (--timer < 0) {
-            connection.send("timesUp");
-            showAnswer();
-            clearInterval(timerHandle);
-
+        if (scale <= 0) {
+            answerDiv.style.display = 'none';
+            clearInterval(animAnswer);
         }
-    },1000);
+    }, 4);
 }
 
 function updateLeaderboard(leaderboard) {
@@ -157,4 +166,70 @@ function updateLeaderboard(leaderboard) {
     lbArray.forEach(user => {
         lbDiv.innerHTML += `${user[0]}: ${user[1]}`;
     });
+}
+
+function startTimer(startTime) {
+    timerDiv.style.transform = 'scale(0)';
+    timerDiv.style.display = 'block';
+    timerDiv.textContent = '00:00';
+    
+    let scale = 0;
+    let interval = 0.05;
+
+    let animTimer = setInterval(function () {
+        scale += interval;
+
+        timerDiv.style.transform = `scale(${scale})`;
+
+        if (scale >= 1) {
+            clearInterval(animTimer);
+        }
+    }, 4);
+
+    let timer = startTime, minutes, seconds;
+    
+    timerHandle = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        timerDiv.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            connection.send("timesUp");
+            hideTimer();
+            showAnswer();
+            clearInterval(timerHandle);
+
+        }
+    },1000);
+}
+
+function hideTimer() {
+    timerDiv.style.transform = 'scale(1)';
+    
+    let scale = 1;
+    let interval = 0.05;
+
+    let animTimer = setInterval(function () {
+        scale -= interval;
+
+        timerDiv.style.transform = `scale(${scale})`;
+
+        if (scale <= 0) {
+            timerDiv.style.display = 'none';
+            clearInterval(animTimer);
+        }
+    }, 4);
+}
+
+function formatAirdate(dateTime) {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+    ];
+    const newDate = new Date(dateTime);
+
+    return `${monthNames[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
 }

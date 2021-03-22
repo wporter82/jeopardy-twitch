@@ -40,6 +40,11 @@ h1 {
     color: goldenrod;
 }
 
+.airdate {
+    font-size: 2vw;
+    color: rgb(252, 221, 144);
+}
+
 #timer {
     font-size: 4vw;
     margin-top: 100px;

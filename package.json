@@ -10,13 +10,12 @@
   },
   "keywords": [],
   "author": "FreakZombie",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "got": "^9.6.0",
     "nodemon": "^2.0.7",
-    "request": "^2.88.2",
     "simon-white-similarity": "^1.0.3",
     "tmi.js": "^1.7.5",
     "ws": "^7.4.3"
