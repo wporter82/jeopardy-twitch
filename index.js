@@ -69,8 +69,13 @@ client.on('message', (channel, tags, message, self) => {
         getQuestions(numQuestions).then((res) => {
             console.log(`*Starting Jeopardy with ${numQuestions} questions`);
             wsConnection.send("loadingQs");
+
+            // reset leaderboard
+            leaderboard = {};
         
-            // save questions in global variable
+            // reset then save questions in global variable
+            questions = [];
+            currentQuestion = 0;
             questions = res;
 
             // send first question to game client

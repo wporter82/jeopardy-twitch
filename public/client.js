@@ -54,9 +54,9 @@ connection.onopen = function (evt) {
             hideAnswer();
 
             // Show game over screen
-            gameOverDiv.style.display = 'block';
             gameOverDiv.innerHTML = '<h1>Game Over</h1><br><br>';
             gameOverDiv.innerHTML += `<div id="winner">Winner: ${username}</div>`;
+            gameOverDiv.style.display = 'block';
         }
     }
 
@@ -92,11 +92,14 @@ connection.onerror = function (error) {
 function startGame(question) {
     console.log("Starting game loop");
 
-    // Hide title screen
-    ['title','messages','answer'].forEach(block => {
+    // Hide title and  and game over screens
+    ['title','messages','answer','gameover'].forEach(block => {
         let blockDiv = document.getElementById(block);
         blockDiv.style.display = 'none';
     });
+
+    // reset leaderboard
+    updateLeaderboard([]);
 
     // Display question
     questionBlock.innerHTML = `<div class="category">${String(question.category_name).toUpperCase()}</div>`;
