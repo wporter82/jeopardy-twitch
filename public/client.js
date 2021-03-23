@@ -7,6 +7,12 @@ let questionBlock = document.getElementById('questionBlock');
 let answerDiv = document.getElementById('answer');
 let gameOverDiv = document.getElementById('gameover');
 let lbDiv = document.getElementById('leaderboard');
+let categoryDiv = document.getElementById('category');
+let airdateDiv = document.getElementById('airdate');
+let valueDiv = document.getElementById('value');
+let questionNumberDiv = document.getElementById('question-number');
+let questionDiv = document.getElementById('question');
+let winnerDiv = document.getElementById('winner');
 
 const TIME_LIMIT = 2 * 60;
 
@@ -20,6 +26,8 @@ connection.onopen = function (evt) {
 
         if (msg.data === 'loadingQs') {
             messagesDiv.innerHTML = 'Loading questions...';
+            // reset leaderboard
+            updateLeaderboard([]);
         }
 
         // If data coming server is JSON, parse and process it
@@ -54,8 +62,7 @@ connection.onopen = function (evt) {
             hideAnswer();
 
             // Show game over screen
-            gameOverDiv.innerHTML = '<h1>Game Over</h1><br><br>';
-            gameOverDiv.innerHTML += `<div id="winner">Winner: ${username}</div>`;
+            winnerDiv.innerHTML = `Winner: ${username}`;
             gameOverDiv.style.display = 'block';
         }
     }
@@ -98,15 +105,12 @@ function startGame(question) {
         blockDiv.style.display = 'none';
     });
 
-    // reset leaderboard
-    updateLeaderboard([]);
-
     // Display question
-    questionBlock.innerHTML = `<div class="category">${String(question.category_name).toUpperCase()}</div>`;
-    questionBlock.innerHTML += `<div class="airdate">Airdate: ${formatAirdate(question.airdate)}</div>`;
-    questionBlock.innerHTML += `<div class="value">Points: ${question.value}</div>`;
-    questionBlock.innerHTML += `<div class="question-number">Question ${question.question_number}</div><br>`;
-    questionBlock.innerHTML += `<div class="question">${question.question}</div>`;
+    categoryDiv.innerHTML = `${String(question.category_name).toUpperCase()}`;
+    airdateDiv.innerHTML = `Airdate: ${formatAirdate(question.airdate)}`;
+    valueDiv.innerHTML = `Points: ${question.value}`;
+    questionNumberDiv.innerHTML = `Question ${question.question_number}`;
+    questionDiv.innerHTML = `${question.question}`;
     questionBlock.style.display = 'block';
 
     // Display timer and start counting down
@@ -165,7 +169,7 @@ function updateLeaderboard(leaderboard) {
     });
 
 
-    lbDiv.innerHTML = "Leaderboard:<br><br>";
+    lbDiv.innerHTML = "Leaderboard<br><br>";
 
     lbArray.forEach(user => {
         lbDiv.innerHTML += `${user[0]}: ${user[1]}`;

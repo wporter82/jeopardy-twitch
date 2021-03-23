@@ -25,22 +25,22 @@ h1 {
     margin: auto;
 }
 
-.category {
+#category {
     font-size: 3vw;
     font-weight: bold;
 }
 
-.value {
+#value {
     font-size: 2vw;
 }
 
-.question {
+#question {
     font-size: 3vw;
     font-weight: bold;
     color: goldenrod;
 }
 
-.airdate {
+#airdate {
     font-size: 2vw;
     color: rgb(252, 221, 144);
 }
@@ -60,7 +60,7 @@ h1 {
 }
 #leaderboard {
     padding: 10px;
-    font-size: 2em;
+    font-size: 2vw;
     border-radius: 15px;
     background-color:rgba(0,0,0,.25);
     position: fixed;
