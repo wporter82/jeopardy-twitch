@@ -30,6 +30,5 @@ Once the server is running, open a browser to [http://localhost:8086](http://loc
 When you are ready to play type `!jeopardy` in the chat and it will start a game with 5 questions. You can specify any number from 1 to 50 for a game with as many questions as you want, ie: `!jeopardy 25`
 
 ## Known Issues:
-* Question number is not displayed so there is no way to know how many questions there are in total and how many are left to go
 * Game server isn't able to provide any feedback in chat without adding an OAuth Token so it is currently not being done
 * Game screen needs to be cleaned up and made to look better

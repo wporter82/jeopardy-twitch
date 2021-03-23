@@ -104,7 +104,8 @@ function startGame(question) {
     // Display question
     questionBlock.innerHTML = `<div class="category">${String(question.category_name).toUpperCase()}</div>`;
     questionBlock.innerHTML += `<div class="airdate">Airdate: ${formatAirdate(question.airdate)}</div>`;
-    questionBlock.innerHTML += `<div class="value">Points: ${question.value}</div><br>`;
+    questionBlock.innerHTML += `<div class="value">Points: ${question.value}</div>`;
+    questionBlock.innerHTML += `<div class="question-number">Question ${question.question_number}</div><br>`;
     questionBlock.innerHTML += `<div class="question">${question.question}</div>`;
     questionBlock.style.display = 'block';
 

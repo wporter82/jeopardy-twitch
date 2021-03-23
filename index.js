@@ -174,6 +174,11 @@ async function getQuestions(numQs = 5) {
                 questions.push(temp);
             }
         }
+
+        let qCount = 1;
+        questions.forEach(q => {
+            q.question_number = `${qCount++} of ${numQs}`;
+        });
         
         console.log(`*Gathered ${questions.length} questions`);
         return questions;
