@@ -92,7 +92,7 @@ client.on('message', (channel, tags, message, self) => {
     // while the game is running, process messages and check for correct answers
     if (gameRunning) {
         // check how close of a match the user's text is
-        let score = getSimilarityScore(questions[currentQuestion].answer, message) * 100;
+        let score = getSimilarityScore(questions[currentQuestion].answer, message);
         if (score > SCORE_THRESHOLD) {
             gameRunning = false;
             
@@ -128,9 +128,9 @@ function getSimilarityScore(answer, guess) {
                     .trim()
                     .toLowerCase();
     
-    console.log(answer);
-    console.log(guess);
-    return sws(answer, guess);
+    const score = sws(answer, guess) * 100;
+    console.log(`* Similarity: ${score} - Answer: "${answer}" - Guess: "${guess}"`);
+    return score;
 }
 
 async function getQuestions(numQs = 5) {
