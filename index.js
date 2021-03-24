@@ -167,7 +167,11 @@ async function getQuestions(numQs = 5) {
                 let temp;
                 do {
                     temp = parsedData.clues[Math.floor(Math.random() * parsedData.clues.length)];
-                } while (temp.invalid_count !== null && temp.question !== "");
+                } while (
+                    temp.invalid_count !== null &&
+                    temp.question !== "" &&
+                    questions.find(element => element.id !== temp.id)
+                );
 
                 temp.category_name = parsedData.title;
                 if (!temp.value) temp.value = 200;

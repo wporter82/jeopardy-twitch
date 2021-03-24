@@ -35,7 +35,7 @@ h1 {
 }
 
 #question {
-    font-size: 3vw;
+    font-size: 2vw;
     font-weight: bold;
     color: goldenrod;
 }
@@ -51,7 +51,7 @@ h1 {
     display: none;
 }
 #answer {
-    font-size: 3vw;
+    font-size: 2vw;
     margin-top: 100px;
     display: none;
 }

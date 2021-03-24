@@ -45,7 +45,8 @@ connection.onopen = function (evt) {
             hideTimer();
 
             showAnswer();
-            answerDiv.innerHTML += `by User: ${username}`
+            // TODO: fix this to be in a better place
+            answerDiv.innerHTML += `by User: ${username}`;
 
             updateLeaderboard(JSON.parse(msg.data.split('|')[2]));
         }
@@ -120,7 +121,7 @@ function startGame(question) {
 function showAnswer() {
     answerDiv.style.transform = 'scale(0)';
     answerDiv.style.display = 'block';
-    answerDiv.innerHTML = `Correct Answer:<br><br>${question.answer}<br><br>`;
+    answerDiv.innerHTML = `Correct Answer:<br>${question.answer}<br>`;
 
     let scale = 0;
     let interval = 0.05;
