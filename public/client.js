@@ -74,7 +74,7 @@ connection.onopen = function (evt) {
         // Hide game screens
         ['questionBlock','timer','answer','gameover'].forEach(block => {
             let blockDiv = document.getElementById(block);
-            blockDiv.style.display = 'block';
+            blockDiv.style.display = 'none';
         });
         
 
